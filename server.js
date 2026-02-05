@@ -3,18 +3,12 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     cookieSession = require('cookie-session'),
     serveStatic = require('serve-static'),
-    expressValidator = require('express-validator'),
     passport = require('passport'),
-    crypto = require('crypto'),
     flash = require('connect-flash'),
     mongoose = require('mongoose'),
     morgan       = require('morgan');
 
-var handlebars = require('express-handlebars').create({
-    layoutsDir: "views/layouts",
-    partialsDir: "views/partials",
-    defaultLayout: 'main'
-});
+var { engine } = require('express-handlebars');
 
 //Intialise express framework
 var app = express();
@@ -35,8 +29,11 @@ app.use(bodyParser.urlencoded({
 }));
 app.set('views', __dirname + '/views'); // set template directory
 app.set('view engine', 'handlebars'); //set view engine to handlebars
-app.engine('handlebars', handlebars.engine);
-app.use(expressValidator());
+app.engine('handlebars', engine({
+    layoutsDir: "views/layouts",
+    partialsDir: "views/partials",
+    defaultLayout: 'main'
+}));
 app.use(passport.initialize());
 app.use(passport.session()); //persistant login sessions
 app.use(serveStatic('./public')); //serve static files from public directory
