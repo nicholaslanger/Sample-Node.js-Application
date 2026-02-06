@@ -1,7 +1,7 @@
 var express = require('express'),
     bodyParser = require('body-parser'),
     cookieParser = require('cookie-parser'),
-    cookieSession = require('cookie-session'),
+    session = require('express-session'),
     serveStatic = require('serve-static'),
     passport = require('passport'),
     flash = require('connect-flash'),
@@ -19,8 +19,10 @@ mongoose.connect('mongodb://127.0.0.1:27017/samplenodejsapp')
 require('./src/middleware/passport')(passport);
 
 app.use(cookieParser('SampleNode.jsApp')); //read cookies
-app.use(cookieSession({
-    keys: ['key1', 'key2']
+app.use(session({
+    secret: 'SampleNode.jsApp',
+    resave: false,
+    saveUninitialized: false
 }));
 
 app.use(bodyParser.json()); // get information from html forms
